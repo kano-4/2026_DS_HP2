@@ -1,1 +1,214 @@
 
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>星座スロット占い</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #17102e, #47316d);
+      font-family: sans-serif;
+      color: white;
+      text-align: center;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 500px;
+      padding: 35px 20px;
+      background: #2b204b;
+      border: 3px solid #e8c77b;
+      border-radius: 25px;
+      box-shadow: 0 0 35px rgba(255, 215, 120, 0.25);
+    }
+
+    h1 {
+      color: #ffe4a3;
+      font-size: 30px;
+      margin-bottom: 10px;
+    }
+
+    .description {
+      color: #d9cbea;
+      font-size: 14px;
+      margin-bottom: 30px;
+    }
+
+    .slot-machine {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 30px 0;
+    }
+
+    .reel {
+      width: 100px;
+      height: 110px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #fff8ed;
+      border: 4px solid #d7ac58;
+      border-radius: 15px;
+      color: #392650;
+      font-size: 55px;
+      box-shadow: inset 0 0 15px #d7c7b2;
+    }
+
+    button {
+      background: linear-gradient(135deg, #f6d98a, #d9a749);
+      border: none;
+      border-radius: 40px;
+      padding: 16px 40px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #392650;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px #f6d98a;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    #result {
+      margin-top: 25px;
+      min-height: 75px;
+      font-size: 22px;
+      font-weight: bold;
+      color: #ffe4a3;
+    }
+
+    .sparkle {
+      animation: glow 0.8s infinite alternate;
+    }
+
+    @keyframes glow {
+      from {
+        text-shadow: 0 0 5px gold;
+      }
+      to {
+        text-shadow: 0 0 25px gold, 0 0 40px orange;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .reel {
+        width: 80px;
+        height: 90px;
+        font-size: 42px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <h1>🔮 星座スロット占い 🔮</h1>
+
+    <p class="description">
+      スロットを回して、今日の運勢を占おう！
+    </p>
+
+    <div class="slot-machine">
+      <div class="reel" id="reel1">🌙</div>
+      <div class="reel" id="reel2">⭐</div>
+      <div class="reel" id="reel3">☀️</div>
+    </div>
+
+    <button id="spinButton" onclick="spin()">
+      ✦ スロットを回す ✦
+    </button>
+
+    <div id="result"></div>
+
+  </div>
+
+  <script>
+    const symbols = [
+      "🌙", "⭐", "☀️", "💎",
+      "🍀", "💖", "🔮", "♈"
+    ];
+
+    let spinning = false;
+
+    function spin() {
+
+      if (spinning) return;
+
+      spinning = true;
+
+      const button = document.getElementById("spinButton");
+      const result = document.getElementById("result");
+
+      button.disabled = true;
+      result.innerHTML = "";
+
+      const reels = [
+        document.getElementById("reel1"),
+        document.getElementById("reel2"),
+        document.getElementById("reel3")
+      ];
+
+      reels.forEach((reel, index) => {
+
+        reel.classList.remove("sparkle");
+
+        const interval = setInterval(() => {
+
+          const random = Math.floor(
+            Math.random() * symbols.length
+          );
+
+          reel.textContent = symbols[random];
+
+        }, 80);
+
+        setTimeout(() => {
+
+          clearInterval(interval);
+
+          // 最終的におひつじ座が揃う
+          reel.textContent = "♈";
+          reel.classList.add("sparkle");
+
+          if (index === 2) {
+
+            result.innerHTML =
+              "🎉 大当たり！ 🎉<br>" +
+              "本日の第1位は<br>" +
+              "♈ おひつじ座 ♈";
+
+            button.disabled = false;
+            button.textContent = "↻ もう一度回す";
+            spinning = false;
+          }
+
+        }, 1500 + index * 700);
+
+      });
+    }
+  </script>
+
+</body>
+</html>
+
